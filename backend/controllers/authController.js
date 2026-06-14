@@ -20,12 +20,12 @@ const registerUser = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         } 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const salt = await bcrypt.genSalt(10);//!SECTION Generate a salt for hashing the password
+        const hashedPassword = await bcrypt.hash(password, salt);//!SECTION Hash the password using bcrypt with the generated salt
         
 
 
-        const user = await User.create({ name, email, password: hashedPassword });
+        const user = await User.create({ name, email, password: hashedPassword });//!SECTION Create a new user in the database with the hashed password
         if(user){
             const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a 6-digit OTP
             const message = `Your OTP for ShopNest registration is: ${otp}`;
@@ -72,7 +72,7 @@ const loginUser = async (req, res) => {
 
 const getUsers = async (req, res) => {
     try {
-        const users = await User.find({}).select('-password'); // Exclude password from the response
+        const users = await User.find({}).select('-password'); // Exclude password from the response//!SECTION Fetch all users from the database and exclude the password field from the response
         res.json(users);
     } catch (error) {
         console.error('Error fetching users:', error);
